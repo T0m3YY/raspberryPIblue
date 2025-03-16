@@ -1,0 +1,77 @@
+[
+    {
+        "mac": "AA:BB:CC:DD:EE:01",
+        "name": "JBL Speaker",
+        "rssi": -45
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:02",
+        "name": "Wireless Headphones",
+        "rssi": -50
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:03",
+        "name": "Smartwatch",
+        "rssi": -60
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:04",
+        "name": "Laptop",
+        "rssi": -55
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:05",
+        "name": "Smart TV",
+        "rssi": -40
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:06",
+        "name": "Bluetooth Speaker",
+        "rssi": -33
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:07",
+        "name": "Tablet",
+        "rssi": -65
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:08",
+        "name": "Phone",
+        "rssi": -25
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:09",
+        "name": "Smart Thermostat",
+        "rssi": -50
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:10",
+        "name": "Game Console",
+        "rssi": -55
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:11",
+        "name": "PC",
+        "rssi": -43
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:12",
+        "name": "Camera",
+        "rssi": -70
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:13",
+        "name": "Printer",
+        "rssi": -80
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:14",
+        "name": "Microwave",
+        "rssi": -35
+    },
+    {
+        "mac": "AA:BB:CC:DD:EE:15",
+        "name": "Refrigerator",
+        "rssi": -60
+    }
+]
