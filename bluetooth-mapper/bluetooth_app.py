@@ -28,22 +28,60 @@ class BluetoothApp(QMainWindow):
         # === Sidebar (Navigatie) ===
         self.sidebar = QListWidget()
         self.sidebar.setFixedWidth(250)
-        self.sidebar.setStyleSheet("""
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #1e1e2f;
+                color: white;
+            }
             QListWidget {
                 background-color: #23272A;
                 color: white;
-                font-size: 18px;
-                border: none;
-                padding: 10px;
+                font-size: 17px;
+                border: 2px solid #5865F2;
+                padding: 5px;
+                border-radius: 8px;
                 font-family: 'Segoe UI', sans-serif;
             }
             QListWidget::item {
-                padding: 20px;
+                padding: 15px;
+                margin: 5px 0;
+                border-radius: 5px;
             }
             QListWidget::item:selected {
                 background-color: #5865F2;
+                border-left: 5px solid white;
+                font-weight: bold;
+            }
+            QListWidget::item:hover {
+                background-color: #3A3F44;
+            }
+            QPushButton {
+                background-color: #5865F2;
+                color: white;
+                font-size: 15px;
+                padding: 10px;
+                margin: 10px 0;
+                border-radius: 8px;
+                border: 2px solid #4a5bc8;
+            }
+            QPushButton:hover {
+                background-color: #4a5bc8;
+                border: 2px solid #3a4bb5;
+            }
+            QPushButton:pressed {
+                background-color: #3a4bb5;
+                border: 2px solid #2a3aa2;
+            }
+            QLabel {
+                color: #aab2bb;
+                padding: 10px;
+                font-size: 17px;
+            }
+            QListWidget::item:selected {
+                background-color: #7289DA;
             }
         """)
+
 
         # Voeg iconen toe met tekst aan de sidebar
         home_item = QListWidgetItem(QIcon("home.png"), "🏠 Home")
