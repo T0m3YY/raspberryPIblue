@@ -100,8 +100,8 @@ class BluetoothApp(QMainWindow):
         home_layout = QVBoxLayout()
 
         intro_text = QLabel("Welkom bij de Bluetooth Scanner!\nMaak verbinding en ontdek apparaten in de buurt.")
-        intro_text.setFont(QFont("Arial", 20, QFont.Bold))
-        intro_text.setStyleSheet("color: #aab2bb; padding: 20px; text-align: center;")
+        intro_text.setFont(QFont("Arial", 35, QFont.Bold))
+        intro_text.setStyleSheet("color: #aab2bb; margin-top:10px; margin-bottom:10px;")
         home_layout.addWidget(intro_text)
 
         # Alinea 1: Over de Bluetooth Scanner
@@ -110,8 +110,9 @@ class BluetoothApp(QMainWindow):
             "Handig om te bepalen hoe dichtbij een apparaat is en of het actief signalen uitzendt. "
             "Dit helpt bij netwerkbeheer, debugging en beveiligingstests."
         )
+        # scanner_info.setFont(QFont("Arial"))
         scanner_info.setWordWrap(True)
-        scanner_info.setStyleSheet("color: #d1d1e0; padding: 10px 20px; font-size: 15px;")
+        scanner_info.setStyleSheet("color: #d1d1e0; padding: 10px 20px;")
         home_layout.addWidget(scanner_info)
 
         # Alinea 2: Hacken & MAC-Spoofing
@@ -121,7 +122,7 @@ class BluetoothApp(QMainWindow):
             "Dit maakt het moeilijker om getraceerd te worden en helpt bij het omzeilen van filters die apparaten blokkeren op basis van hun MAC-adres."
         )
         hacking_info.setWordWrap(True)
-        hacking_info.setStyleSheet("color: #d1d1e0; padding: 10px 20px; font-size: 15px;")
+        hacking_info.setStyleSheet("color: #d1d1e0; padding: 10px 20px;")
         home_layout.addWidget(hacking_info)
 
 
@@ -212,6 +213,10 @@ class BluetoothApp(QMainWindow):
         container.setLayout(main_layout)
         self.setCentralWidget(container)
 
+        intro_text.setObjectName("intro_text")
+        scanner_info.setObjectName("paragraph")
+        hacking_info.setObjectName("paragraph")
+
         self.load_data()
 
     def open_link(self, url):
@@ -254,14 +259,31 @@ class BluetoothApp(QMainWindow):
         else:
             return QColor("#FF0000")  # Rood (zwak signaal)
         
+
+
+        
     def resizeEvent(self, event):
         # Haal de breedte van het venster op
         width = self.width()
 
         # Bereken een schaalfactor voor de fontgrootte
         base_size = 16  # Startgrootte
-        scale_factor = width / 900  # Schalen t.o.v. een basisbreedte van 800px
-        new_size = max(int(base_size * scale_factor), 20)  # Minimaal 10px
+        scale_factor = width / 1000  
+        new_size = max(int(base_size * scale_factor), 20)  
+
+        # Lettergroottes instellen
+        intro_size = max(int(25 * scale_factor), 35)  # Minimaal 25px
+        paragraph_size = max(int(17 * scale_factor), 25)  # Minimaal 20px
+
+        # Pas stijlen toe op de tekst
+        self.pages.setStyleSheet(f"""
+            QLabel#intro_text {{
+                font-size: {intro_size}px;
+            }}
+            QLabel#paragraph {{
+                font-size: {paragraph_size}px;
+            }}
+        """)
 
         # Pas de lettergrootte toe op sidebar en labels
         self.sidebar.setStyleSheet(f"""
@@ -269,11 +291,11 @@ class BluetoothApp(QMainWindow):
                 font-size: {new_size}px;
             }}
         """)
-        self.pages.setStyleSheet(f"""
-            QLabel {{
-                font-size: {new_size}px;
-            }}
-        """)
+        # self.pages.setStyleSheet(f"""
+        #     QLabel {{
+        #         font-size: {new_size}px;
+        #     }}
+        # """)
 
         # Pas de lettergrootte toe op de knoppen
         self.btn_tips.setStyleSheet(f"""
