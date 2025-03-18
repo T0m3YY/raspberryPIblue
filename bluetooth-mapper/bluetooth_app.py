@@ -17,7 +17,10 @@ class BluetoothApp(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Bluetooth Scanner")
-        self.setGeometry(100, 100, 800, 600)
+
+        self.adjustSize()
+        self.setGeometry(200, 200, 900, 800)  # (x, y, width, height)
+
         self.setStyleSheet("background-color: #1e1e2f; color: white;")
 
         self.initUI()
@@ -254,7 +257,7 @@ class BluetoothApp(QMainWindow):
             return QColor("#00FF00")  # Groen (zeer sterk signaal)
         elif rssi >= -50:
             return QColor("#FFFF00")  # Geel (goed signaal)
-        elif rssi >= -70:
+        elif rssi >= -60:
             return QColor("#FFA500")  # Oranje (matig signaal)
         else:
             return QColor("#FF0000")  # Rood (zwak signaal)
@@ -337,5 +340,5 @@ class BluetoothApp(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = BluetoothApp()
-    window.show()
+    window.showNormal()  # Zorg ervoor dat het venster niet gemaximaliseerd start
     sys.exit(app.exec_())
