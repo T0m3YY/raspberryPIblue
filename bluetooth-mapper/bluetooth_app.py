@@ -3,6 +3,7 @@
 import sys
 import json
 import webbrowser
+import PyQt5
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QLabel, QPushButton,
     QHBoxLayout, QMainWindow, QListWidget, QStackedWidget,
@@ -230,13 +231,13 @@ class BluetoothApp(QMainWindow):
 
     def load_data(self):
         try:
-            with open("bluetooth-mapper/bluetooth_devices.json", "r") as f:
-                data = json.load(f)
+            with open("bluetooth_devices.json", "r") as file:
+                data = json.load(file)
 
             self.list_widget.clear()
 
             # Sorteren op RSSI van sterk naar zwak
-            data.sort(key=lambda x: x.get("rssi", -100), reverse=True)
+            data.sort(key=lambda x: x.get("rssi", -100), reverse=False)
 
             for device in data:
                 mac = device.get("mac", "Onbekend")
@@ -253,11 +254,15 @@ class BluetoothApp(QMainWindow):
             self.list_widget.addItem("❌ Geen geldige data gevonden.")
 
     def get_rssi_color(self, rssi):
-        if rssi >= -38:
+        if not rssi.lstrip("-").isdigit():
+            return QColor("#808080")
+            
+        rssi_int = int(rssi)    
+        if rssi_int >= -42:
             return QColor("#00FF00")  # Groen (zeer sterk signaal)
-        elif rssi >= -50:
+        elif rssi_int >= -50:
             return QColor("#FFFF00")  # Geel (goed signaal)
-        elif rssi >= -60:
+        elif rssi_int >= -65:
             return QColor("#FFA500")  # Oranje (matig signaal)
         else:
             return QColor("#FF0000")  # Rood (zwak signaal)
