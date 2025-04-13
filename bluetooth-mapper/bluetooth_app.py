@@ -7,10 +7,10 @@ import PyQt5
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QLabel, QPushButton,
     QHBoxLayout, QMainWindow, QListWidget, QStackedWidget,
-    QListWidgetItem, QFrame
+    QListWidgetItem, QFrame, QProgressBar
 )
 from PyQt5.QtGui import QFont, QColor, QIcon, QCursor
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve
 
 
 class BluetoothApp(QMainWindow):
@@ -23,8 +23,99 @@ class BluetoothApp(QMainWindow):
         self.setGeometry(200, 200, 900, 800)  # (x, y, width, height)
 
         self.setStyleSheet("background-color: #1e1e2f; color: white;")
+        
+        # Create and show preloader before initializing UI
+        self.setup_preloader()
+        self.show_preloader()
+        
+        # The initialize_app will now be called from update_progress when progress reaches 100%
+        # No need for this timer anymore:
+        # QTimer.singleShot(1500, self.initialize_app)
 
+    def setup_preloader(self):
+        # Create preloader widget
+        self.preloader_widget = QWidget(self)
+        self.preloader_widget.setGeometry(0, 0, self.width(), self.height())
+        self.preloader_widget.setStyleSheet("background-color: #1e1e2f;")
+        
+        # Create layout for preloader
+        preloader_layout = QVBoxLayout(self.preloader_widget)
+        preloader_layout.setAlignment(Qt.AlignCenter)
+        
+        # Add app title
+        title_label = QLabel("Bluetooth Scanner")
+        title_label.setFont(QFont("Arial", 24, QFont.Bold))
+        title_label.setStyleSheet("color: #5865F2; margin-bottom: 30px;")
+        title_label.setAlignment(Qt.AlignCenter)
+        preloader_layout.addWidget(title_label)
+        
+        # Add loading text
+        loading_label = QLabel("Loading...")
+        loading_label.setFont(QFont("Arial", 14))
+        loading_label.setStyleSheet("color: #aab2bb; margin-bottom: 20px;")
+        # loading_label.setAlignment(Qt.AlignCenter)
+        preloader_layout.addWidget(loading_label)
+        
+        # Add progress bar
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(0)
+        self.progress_bar.setTextVisible(False)
+        self.progress_bar.setFixedHeight(10)
+        self.progress_bar.setFixedWidth(300)
+        self.progress_bar.setStyleSheet("""
+            QProgressBar {
+                background-color: #23272A;
+                border-radius: 5px;
+                border: 1px solid #5865F2;
+            }
+            QProgressBar::chunk {
+                background-color: #5865F2;
+                border-radius: 5px;
+            }
+        """)
+        preloader_layout.addWidget(self.progress_bar)
+        
+        # Hide preloader initially
+        self.preloader_widget.hide()
+
+    def show_preloader(self):
+        self.preloader_widget.show()
+        
+        # Animate progress bar
+        self.progress_timer = QTimer(self)
+        self.progress_timer.timeout.connect(self.update_progress)
+        self.progress_timer.start(30)
+        self.progress_value = 0
+
+    def update_progress(self):
+        self.progress_value += 2
+        self.progress_bar.setValue(self.progress_value)
+        
+        if self.progress_value >= 100:
+            self.progress_timer.stop()
+            # Initialize the app when progress reaches 100%
+            QTimer.singleShot(200, self.initialize_app)
+
+    def hide_preloader(self):
+        # Make sure timer is stopped
+        if hasattr(self, 'progress_timer') and self.progress_timer.isActive():
+            self.progress_timer.stop()
+            
+        # Create fade out animation
+        self.fade_out = QPropertyAnimation(self.preloader_widget, b"windowOpacity")
+        self.fade_out.setDuration(500)
+        self.fade_out.setStartValue(1.0)
+        self.fade_out.setEndValue(0.0)
+        self.fade_out.setEasingCurve(QEasingCurve.OutQuad)
+        self.fade_out.finished.connect(self.preloader_widget.hide)
+        self.fade_out.start()
+
+    def initialize_app(self):
+        # Initialize the main UI
         self.initUI()
+        # Hide the preloader
+        self.hide_preloader()
 
     def initUI(self):
         main_layout = QHBoxLayout()
@@ -271,6 +362,17 @@ class BluetoothApp(QMainWindow):
 
         
     def resizeEvent(self, event):
+        # Update preloader size and position to match window
+        if hasattr(self, 'preloader_widget'):
+            self.preloader_widget.setGeometry(0, 0, self.width(), self.height())
+            
+        # Check if pages attribute exists before trying to access it
+        if not hasattr(self, 'pages'):
+            # If pages doesn't exist yet (during preloader), just call the parent method
+            super().resizeEvent(event)
+            return
+            
+        # Rest of the existing resizeEvent code
         # Haal de breedte van het venster op
         width = self.width()
 
